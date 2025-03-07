@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30">
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss SSS} %X{apiRequestId} %-5level %logger{36}.%M() @%L : %msg%n" />
+        </Console>
+
+        <!-- Rolling File Appender with size-based triggering policy -->
+        <RollingRandomAccessFile name="RollingFile" fileName="E:/ApplicationLog/RammasInsights/AppLogs.log" filePattern="E:/ApplicationLog/RammasInsights/Archive/%d{yyyy-MM-dd-HH}-%i.log.zip">
+            <PatternLayout charset="UTF-8" pattern="%d{yyyy-MM-dd HH:mm:ss SSS} %-5level %X{apiRequestId} %logger{36}.%M() @%L : %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="200" />
+        </RollingRandomAccessFile>
+
+        <!-- Asynchronous Logging -->
+        <Async name="Async">
+            <AppenderRef ref="RollingFile"/>
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <!-- Custom Logger for com.dewa -->
+        <Logger name="com.basePack" level="debug" additivity="false">
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <!-- Logger for Spring framework -->
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <!-- Root Logger with appropriate level -->
+        <Root level="info">
+            <AppenderRef ref="Async" />
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
